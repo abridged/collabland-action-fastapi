@@ -5,7 +5,10 @@ import uvicorn
 import time
 from datetime import datetime
 from .hello_action.main import hello_action_router
+from dotenv import load_dotenv
+from os import getenv
 
+load_dotenv()
 startTime = time.time()
 tags_metadata = [
     {"name": "root", "description": "Healthcheck API Route"},
@@ -46,6 +49,6 @@ def start():
     uvicorn.run(
         "collabland_action_fastapi.main:app",
         host="0.0.0.0",
-        port=8000,
+        port=int(getenv("PORT")),
         reload=True,
     )
