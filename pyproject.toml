@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "collabland-action-python-template"
+version = "0.1.0"
+description = "A Python Template for Collab.Land Actions"
+authors = ["Abridged, Inc.","Gita Alekhya Paul <54375111+gitaalekhyapaul@users.noreply.github.com>"]
+readme = "README.md"
+packages = [{include = "collabland_action_python_template"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+fastapi = "^0.93.0"
+uvicorn = "^0.21.0"
+discord-py = "^2.2.2"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+start = 'collabland_action_python_template.main:start'
