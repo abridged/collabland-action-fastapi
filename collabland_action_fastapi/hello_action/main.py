@@ -1,15 +1,14 @@
 from typing import Any, Dict
-from discord import InteractionResponse
-from fastapi import APIRouter
+from fastapi import APIRouter, BackgroundTasks
 from discord.enums import (
     InteractionType,
     AppCommandType,
     AppCommandOptionType,
     InteractionResponseType,
 )
-from pydantic import BaseModel
 from ..models.metadata import Metadata
 from ..utils.discord import get_option_value
+from .message import handle_message
 
 hello_action_router = APIRouter(
     prefix="/hello-action",
@@ -56,11 +55,19 @@ async def get_hello_action_metadata() -> Metadata:
 
 
 @hello_action_router.post("/interactions")
-async def post_hello_action_interaction(req: Dict[str, Any]):
+async def post_hello_action_interaction(
+    req: Dict[str, Any], background_tasks: BackgroundTasks
+):
     parsed_req = dict(req)
     input_name = get_option_value(parsed_req, "your-name")
     callback_url = str(req.get("actionContext").get("callbackUrl"))
+    message = f"Hello {input_name} 👋"
+    background_tasks.add_task(handle_message, callback_url, message)
     return {
         "type": InteractionResponseType.channel_message.value,
-        "data": {"content": f"Hello {input_name} 👋"},
+        "data": {
+            "content": message,
+            # Look into: https://discord.com/developers/docs/resources/channel#message-object-message-flags
+            "flags": 1 << 6,
+        },
     }
