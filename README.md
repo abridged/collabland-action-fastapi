@@ -1,1 +1,1 @@
-# collabland-action-python-template
+# collabland-action-fastapi

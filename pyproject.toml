@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "collabland-action-python-template"
+name = "collabland-action-fastapi"
 version = "0.1.0"
-description = "A Python Template for Collab.Land Actions"
+description = "A FastAPI Template for Collab.Land Actions"
 authors = ["Abridged, Inc.","Gita Alekhya Paul <54375111+gitaalekhyapaul@users.noreply.github.com>"]
 readme = "README.md"
-packages = [{include = "collabland_action_python_template"}]
+packages = [{include = "collabland_action_fastapi"}]
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -21,4 +21,4 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-start = 'collabland_action_python_template.main:start'
+start = 'collabland_action_fastapi.main:start'

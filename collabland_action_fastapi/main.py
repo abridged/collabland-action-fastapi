@@ -44,7 +44,7 @@ app.include_router(hello_action_router)
 
 def start():
     uvicorn.run(
-        "collabland_action_python_template.main:app",
+        "collabland_action_fastapi.main:app",
         host="0.0.0.0",
         port=8000,
         reload=True,
