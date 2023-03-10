@@ -1,6 +1,15 @@
+from typing import Any, Dict
+from discord import InteractionResponse
 from fastapi import APIRouter
-from discord.enums import InteractionType, AppCommandType, AppCommandOptionType
+from discord.enums import (
+    InteractionType,
+    AppCommandType,
+    AppCommandOptionType,
+    InteractionResponseType,
+)
+from pydantic import BaseModel
 from ..models.metadata import Metadata
+from ..utils.discord import get_option_value
 
 hello_action_router = APIRouter(
     prefix="/hello-action",
@@ -43,4 +52,15 @@ async def get_hello_action_metadata() -> Metadata:
                 ],
             }
         ],
+    }
+
+
+@hello_action_router.post("/interactions")
+async def post_hello_action_interaction(req: Dict[str, Any]):
+    parsed_req = dict(req)
+    input_name = get_option_value(parsed_req, "your-name")
+    callback_url = str(req.get("actionContext").get("callbackUrl"))
+    return {
+        "type": InteractionResponseType.channel_message.value,
+        "data": {"content": f"Hello {input_name} 👋"},
     }
