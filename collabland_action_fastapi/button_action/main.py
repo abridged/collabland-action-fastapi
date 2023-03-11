@@ -1,5 +1,5 @@
 from typing import Any, Dict
-from fastapi import APIRouter, BackgroundTasks
+from fastapi import APIRouter
 from discord.enums import (
     InteractionType,
     AppCommandType,
@@ -8,7 +8,6 @@ from discord.enums import (
     ComponentType,
 )
 from ..models.metadata import Metadata
-from ..utils.discord import get_option_value
 
 button_action_router = APIRouter(
     prefix="/button-action",
