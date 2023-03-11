@@ -5,6 +5,7 @@ import uvicorn
 import time
 from datetime import datetime
 from .hello_action.main import hello_action_router
+from .button_action.main import button_action_router
 from dotenv import load_dotenv
 from os import getenv
 
@@ -15,6 +16,10 @@ tags_metadata = [
     {
         "name": "hello-action",
         "description": "API Routes dealing with the **/hello-action** slash command.",
+    },
+    {
+        "name": "button-action",
+        "description": "API Routes dealing with the **/button-action** slash command.",
     },
 ]
 app = FastAPI(
@@ -43,6 +48,7 @@ async def root():
 
 
 app.include_router(hello_action_router)
+app.include_router(button_action_router)
 
 
 def start():

@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel
 
 
@@ -10,7 +10,8 @@ class Version(BaseModel):
 # The mini-app supported interactions model
 class SupportedInteractions(BaseModel):
     type: int
-    names: List[str]
+    names: Optional[List[str]]
+    ids: Optional[List[str]]
 
 
 # The mini-app application command metadata model
