@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 import time
@@ -9,9 +9,11 @@ from .button_action.main import button_action_router
 from .popup_action.main import popup_action_router
 from dotenv import load_dotenv
 from os import getenv
+from .utils.signature import SignatureVerifier
 
 load_dotenv()
 startTime = time.time()
+
 tags_metadata = [
     {"name": "root", "description": "Healthcheck API Route"},
     {
@@ -43,6 +45,14 @@ app.add_middleware(
 )
 
 
+@app.middleware("http")
+async def log(req: Request, call_next):
+    if req.url.path.endswith("/interactions") and req.method == "POST":
+        SignatureVerifier()
+    res = await call_next(req)
+    return res
+
+
 @app.get("/", tags=["root"])
 async def root():
     return {
@@ -52,9 +62,15 @@ async def root():
     }
 
 
-app.include_router(hello_action_router)
-app.include_router(button_action_router)
-app.include_router(popup_action_router)
+app.include_router(
+    hello_action_router, dependencies=[Depends(SignatureVerifier.verify_signature)]
+)
+app.include_router(
+    button_action_router, dependencies=[Depends(SignatureVerifier.verify_signature)]
+)
+app.include_router(
+    popup_action_router, dependencies=[Depends(SignatureVerifier.verify_signature)]
+)
 
 
 def start():
@@ -62,5 +78,5 @@ def start():
         "collabland_action_fastapi.main:app",
         host="0.0.0.0",
         port=int(getenv("PORT")),
-        reload=True,
+        reload=False if getenv("SERVER_ENV") == "production" else True,
     )
